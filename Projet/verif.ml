@@ -3,13 +3,13 @@
 open Syntax
 (*Que font les fonctions*)
 (* vérifie qu'une expression à un type donné *)
-(*  'expr -> 'b -> bool*)
-let verif_expr expr t env_type= failwith "Not yet implemented"
+(*  expr -> typ -> bool*)
+let verif_expr expr t env_type env_fonction= failwith "Not yet implemented"
 
 
 (* vérifie que la déclaration des fonctions est correcte *)
-(*  idfun -> bool*)
-let verif_decl_fun fonction env_type = failwith "Not yet implemented"
+(*  idfun ->  bool*)
+let verif_decl_fun fonction env_fonction = failwith "Not yet implemented"
 
 (* retourne vrai si le programme est bien typé sinon faux *)
 (*  'programme -> bool *)
