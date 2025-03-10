@@ -1,3 +1,5 @@
+(* Belouin Eliot & Boyenval Louis-Marie*)
+
 (* La fonction suivante récupère le nom de fichier passé en argument de la ligne de commande,
 ouvre le fichier et applique l'analyse lexicale dessus, renvoyant une valeur de type Lexing.lexbuf *)
 let get_lineBuffer () =
