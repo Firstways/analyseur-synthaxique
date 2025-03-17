@@ -1,6 +1,8 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
 open Syntax
 
+let verif_main _main = failwith""
+
 let verif_id_fun (id : idfun) = id <> "" 
 
 let verif_id_var (id : idvar) = id <> "" 
@@ -45,7 +47,7 @@ let verif_un_op op = match op with
 (*  expr -> typ -> bool*)
 
 (* let verif_expr expr t env_type env_fonction= true *)
-let rec verif_expr expr = match expr with
+let rec verif_expr (expr:expr) = match expr with
 | Var _ -> true
 | IdFun _  ->  true
 | Int _ ->  true
@@ -66,15 +68,26 @@ un type de retour
 une liste d'arguments
 et une expression  *)
 (*  idfun ->  bool*)
-let verif_decl_fun fonction = match fonction with
-  | (id , var_list,typ_retour,corps)-> (verif_id_fun id ) && (verif_var_list var_list) && verif_type_retour typ_retour && verif_expr corps
+let verif_decl_fun (fonction: fun_decl) =
+  (verif_id_fun fonction.id)
+  && (verif_var_list fonction.var_list)
+  && (verif_type_retour fonction.typ_retour)
+  && (verif_expr fonction.corps)
 
+
+let rec verif_main_in_env_fun env_fun = match env_fun with 
+  |[]->false
+  |(k,_)::y-> k = "main" || verif_main_in_env_fun y
 (* retourne vrai si le programme est bien typé sinon faux *)
 (*  'programme -> bool *)
-(* let rec  verif_prog simpleML = match simpleML with
-| [] -> true
-| x::y -> verif_decl_fun x && verif_prog y *)
-let verif_prog _simpleML = true
+let  verif_prog (simpleML:programme) = 
+  let rec aux (p:programme) (env_fun:env_fonction)=
+    match p with
+      | [] -> verif_main_in_env_fun env_fun
+      | x::y -> verif_decl_fun x && aux y ((x.id,x.typ_retour)::env_fun)
+  in aux simpleML []
+
+
 
 (* type utilisé pour vérifie le typage  *)
 (* au début nous avons une liste vide
@@ -87,13 +100,8 @@ type env_type = (idvar * typ) list
 
 type valeur = TInt of int | TBool of bool
 
-(* let x  = ("x",TBool)::[] *)
-
-
-
 (* type utilisé pour vérifier l'évalution des expressions*)
 (* Associe une valeur a une variable *)
 type env_val = (idvar * valeur) list
 
 type env_fun = (idfun * (typ list * typ)) list
-(* type env_fonction =( idfun * typ  ) list*)

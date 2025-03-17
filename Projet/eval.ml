@@ -21,7 +21,7 @@ let () =
     let prog = Parser.prog Lexer.token lineBuffer in
     (*print_string (Syntax.string_of_programme prog);*)
     let type_ok = Verif.verif_prog prog in
-    if type_ok then Evaluateur.eval_prog prog
+    if type_ok then (Evaluateur.eval_prog prog)
     else failwith "Erreur de typage dans le programme fourni en entrée."
   with Parser.Error ->
     failwith

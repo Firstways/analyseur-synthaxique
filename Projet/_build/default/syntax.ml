@@ -116,3 +116,6 @@ let string_of_programme prog =
   List.fold_left
     (fun str_res fdecl -> string_of_fun_decl fdecl ^ "\n" ^ str_res)
     "" prog
+
+
+type env_fonction =( idfun * typ  ) list

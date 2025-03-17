@@ -102,9 +102,14 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
       type prog = fun_decl list
 
 
-  let print_valeur valeur = match valeur with
-  |TInt x-> print_int x
-  |TBool x -> print_string (string_of_bool x)
+  let print_valeur valeur = print_string "\n" ;
+    match valeur with
+    |TInt x-> 
+          print_int x;
+          print_string "\n" 
+    |TBool x -> 
+          print_string (string_of_bool x);
+          print_string "\n" 
 (* Prend en parametre un programme et affiche
 la valeur produite par l'évaluation de la fonction
 main vrai si l'évaluation est correcte, faux sinon*)
