@@ -1,3 +1,5 @@
+(* Belouin Eliot & Boyenval Louis-Marie*)
+
 (* typ représente les types de SimpleML *)
 type typ = TInt | TBool
 
