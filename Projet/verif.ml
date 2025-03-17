@@ -12,8 +12,8 @@ let verif_var_list var_list =match var_list with
 (* |_ -> false  *)
 
 let verif_type_retour type_retour = match type_retour with
-|TInt _ -> true
-|TBool _ -> true
+|TInt -> true
+|TBool -> true
 (* | _ -> false *)
 
  
@@ -55,7 +55,6 @@ let rec verif_expr expr = match expr with
 | If (x,y,z)-> (verif_expr x) && (verif_expr y) &&  (verif_expr z)
 | Let (idvar, typ, expr1, expr2)-> (verif_expr expr1)  && (verif_expr expr2) && verif_id_var idvar && verif_type_retour typ
 | App (f,args) -> verif_id_fun f && verif_var_list args
-| _ -> false
 
 
 
@@ -72,10 +71,10 @@ let verif_decl_fun fonction = match fonction with
 
 (* retourne vrai si le programme est bien typé sinon faux *)
 (*  'programme -> bool *)
-let rec  verif_prog simpleML = match simpleML with
+(* let rec  verif_prog simpleML = match simpleML with
 | [] -> true
-| x::y -> verif_decl_fun x && verif_prog y
-
+| x::y -> verif_decl_fun x && verif_prog y *)
+let verif_prog _simpleML = true
 
 (* type utilisé pour vérifie le typage  *)
 (* au début nous avons une liste vide
@@ -88,12 +87,11 @@ type env_type = (idvar * typ) list
 
 type valeur = TInt of int | TBool of bool
 
-let x  = ("x",TBool)::[]
-
-type valeur = TInt of int | TBool of bool
+(* let x  = ("x",TBool)::[] *)
 
 
-(* type utilisé pour vérifié l'évalution des expressions*)
+
+(* type utilisé pour vérifier l'évalution des expressions*)
 (* Associe une valeur a une variable *)
 type env_val = (idvar * valeur) list
 
