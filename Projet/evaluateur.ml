@@ -1,4 +1,51 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
+open Syntax
+open Verif
+
+type tretour = 
+|Type of typ
+|IdV of idvar
+|IdF of idfun
+| OpBin of binary_op
+| OpUn of unary_op
+| Cond of bool*expr*expr
+| Let of idvar * typ * expr * expr
+| App of idfun * expr list
+
+let  eval_bin_int_op op  = match op with
+  | Plus -> (+)
+  | Minus -> (-)
+  | Mult -> ( * )
+  | Div -> ( / ) 
+  | _ -> failwith "non integer"
+  
+  let  eval_bin_bool_op op  = match op with 
+    | And -> (&&)
+    | Or -> (||)
+    | _ -> failwith "Opérateur non supporté"
+
+  let  eval_bin_comp_op op  = match op with 
+  | Equal -> (=)
+  | NEqual -> (!=)
+  | Less -> (<)
+  | LessEq -> (<=)
+  | Great -> (>)
+  | GreatEq -> (<=)
+  | _ -> failwith ""
+
+let match_un_op op = match op with
+| Not -> (!)
+
+let match_bin_op exp = match  exp with
+| Plus|Minus|Mult|Div -> eval_bin_bool_op exp 
+|Or|And->eval_bin_bool_op exp
+| Equal|NEqual|Less|LessEq|Great|GreatEq-> eval_bin_comp_op exp
+
+
+let eval_fun_args args f =
+  match args with
+  | [] -> None 
+  | x :: xs -> Some (List.fold_left f x xs)
 
 (* Fonction prenant en parametre une expression et
 fourni un résultat en sortie *)
@@ -56,6 +103,17 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
 (* Prend en parametre un programme et affiche
 la valeur produite par l'évaluation de la fonction
 main vrai si l'évaluation est correcte, faux sinon*)
+(* Concretement prog est une liste de fonction
+chaque fonction contient :
+- un nom 
+- des arguments
+- un type de retour
+- expression
+
+pour chaque expression on souhaite l'évaluer et associé sa valeur à son id
+
+on souhaite que le programme affiche le resultat du programme
+*)
 (* 'programme -> unit() *)
 
 
