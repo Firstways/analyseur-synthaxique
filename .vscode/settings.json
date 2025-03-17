@@ -1,5 +1,7 @@
 {
     "ocaml.sandbox": {
+        "ocaml-lsp.serverPath": "/home/votre_utilisateur/.opam/default/bin/ocamllsp"
+
         "kind": "global"
     }
 }

@@ -23,8 +23,12 @@ que son type  *)
 (* Associe un type a une variable *)
 type env_type = (idvar * typ) list
 
+
+
+type valeur = TInt of int | TBool of bool
+
 (* type utilisé pour vérifié l'évalution des expressions*)
 (* Associe une valeur a une variable *)
 type env_val = (idvar * valeur) list
 
-type valeur = TInt of int | TBool of bool
+type env_fun = (idfun * (typ list * typ)) list
