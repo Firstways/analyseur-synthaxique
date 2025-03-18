@@ -57,6 +57,7 @@ rule token = parse
   | ')'  { RPAR }
   | ','  { COMMA }
   | ':'  { COLON }
+  | ';' {SEMICOLON}
   
   | eof  { EOF }
 

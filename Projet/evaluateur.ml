@@ -97,9 +97,8 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
       let arg_values = List.map (fun e -> eval_expr env_val env_fun e) args in *)
       (* Pour l'instant, on suppose que la fonction est bien définie *)
       TInt 0
+  | Seq (_,_) -> failwith "to do "
 
-
-      type prog = fun_decl list
 
 
   let print_valeur valeur = print_string "\n" ;
@@ -135,7 +134,7 @@ on souhaite que le programme affiche le resultat du programme
   let main_body = main_decl.corps in
   eval_expr env_val  env_fun main_body *)
 
-let eval_prog (p : prog) =
+let eval_prog (p : programme) =
   let env_val = [] in
   let env_fun = List.map (fun decl -> (decl.id, (List.map (fun (_, t) -> t) decl.var_list, decl.typ_retour))) p in
   let main_decl = List.find (fun decl -> decl.id = "main") p in

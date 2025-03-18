@@ -7,6 +7,7 @@ type token =
   | TINT
   | THEN
   | TBOOL
+  | SEMICOLON
   | RPAR
   | PLUS
   | NOT
