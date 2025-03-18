@@ -27,18 +27,19 @@ let verif_type_retour type_retour = match type_retour with
 
 
 let  verif_bin_op op  = match op with
-  | Plus ->Some TInt 
-  | Minus ->Some TInt 
-  | Mult ->Some TInt 
-  | Div ->Some TInt 
-  | And ->Some TInt 
+  | Plus -> Some TInt 
+  | Minus -> Some TInt 
+  | Mult -> Some TInt 
+  | Div -> Some TInt 
+  | And -> Some TInt   (* ⚠️ Devrait être Some TBool *)
   | Or -> Some TBool 
-  | Equal ->Some TBool 
+  | Equal -> Some TBool 
   | NEqual -> Some TBool 
-  | Less -> Some TInt 
-  | LessEq -> Some TInt 
-  | Great -> Some TInt 
-  | GreatEq -> Some TInt 
+  | Less -> Some TInt  (* ⚠️ Devrait être Some TBool *)
+  | LessEq -> Some TInt (* ⚠️ Devrait être Some TBool *)
+  | Great -> Some TInt (* ⚠️ Devrait être Some TBool *)
+  | GreatEq -> Some TInt (* ⚠️ Devrait être Some TBool *)
+
 
 let verif_un_op op = match op with
 | Not -> Some TBool 
@@ -46,10 +47,10 @@ let verif_un_op op = match op with
 
 (* Recherche une variable parmis le type_env 
 Si celle ci est trouvé alors retourne le type de celle ci *)
-(* let recherche_variable_in_type_env variable type_env = 
+let rec  recherche_variable_in_type_env variable (type_env:env_type) = 
   match type_env with 
-    | [] ->  *)
-
+    | [] -> None
+    | (x,t)::y -> if x = variable then Some t else recherche_variable_in_type_env variable y
 
 (*Que font les fonctions*)
 (* vérifie qu'une expression à un type donné *)
@@ -58,8 +59,7 @@ Si celle ci est trouvé alors retourne le type de celle ci *)
 
 (* let verif_expr expr t env_type env_fonction= true *)
 let rec verif_expr (expr:expr) (type_env:env_type) = match expr with
-| Var _ -> None
-| IdFun _  ->  None
+| Var x -> recherche_variable_in_type_env x type_env
 | Int _ ->  Some TInt
 | Bool _ -> Some TBool
 | BinaryOp (op, y, z) ->
@@ -67,20 +67,23 @@ let rec verif_expr (expr:expr) (type_env:env_type) = match expr with
    | Some TInt, Some TInt, Some TInt -> Some TInt  (* Opérations arithmétiques *)
    | Some TBool, Some TBool, Some TBool -> Some TBool  (* Comparaisons *)
    | _ -> None)
+
 | UnaryOp (op, z) ->
   (match verif_un_op op, verif_expr z type_env with
-   | Some TInt, Some TInt -> Some TInt
    | Some TBool, Some TBool -> Some TBool
    | _ -> None)
 
 | If (x, y, z) ->
   (match verif_expr x type_env, verif_expr y type_env, verif_expr z type_env with
-   | Some TBool, Some ty1, Some ty2 -> if ty1 = ty2 then Some ty1 else None
+   | Some TBool, Some TBool, Some TBool -> Some TBool
+   | Some TBool, Some TInt, Some TInt -> Some TBool
    | _ -> None)
 
 | Let (idvar, typ, expr1, expr2) ->
+
+
                 if (verif_expr expr1 ((idvar,typ)::type_env) = Some typ) && verif_id_var idvar && verif_type_retour typ then
-                  verif_expr expr2 type_env
+                  verif_expr expr2 ((idvar,typ)::type_env) 
                 else None
 
 | App (f, args) -> 
