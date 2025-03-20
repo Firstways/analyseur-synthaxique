@@ -1,7 +1,7 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
 
 (* typ représente les types de SimpleML *)
-type typ = TInt | TBool
+type typ = TInt | TBool | TUnit | TFloat
 
 (* Définition de l'arbre de syntaxe abstrait des expressions de SimpleML *)
 
@@ -26,6 +26,10 @@ type binary_op =
   | LessEq
   | Great
   | GreatEq
+  | PlusF
+  | MinusF
+  | MultF
+  | DivF
 
 type unary_op = Not
 
@@ -39,6 +43,9 @@ type expr =
   | If of expr * expr * expr
   | Let of idvar * typ * expr * expr
   | App of idfun * expr list
+  | Seq of expr * expr
+
+
 
 (* Définition du type des déclarations de fonction de SimpleML *)
 
@@ -56,7 +63,11 @@ type programme = fun_decl list
 
 (* Fonctions d'affichage pour la syntaxe de SimpleML *)
 
-let string_of_type typ = match typ with TInt -> "int" | TBool -> "bool"
+let string_of_type typ = match typ with 
+|TInt -> "int" 
+| TBool -> "bool"
+| TUnit -> "unit"
+| TFloat -> "float"
 
 let string_of_binary_op binop =
   match binop with
@@ -72,6 +83,11 @@ let string_of_binary_op binop =
   | LessEq -> "<="
   | Great -> ">"
   | GreatEq -> ">="
+  | PlusF -> "+."
+  | MinusF -> "-."
+  | MultF -> "*."
+  | DivF -> "/."
+
 
 let string_of_unary_op unop = match unop with Not -> "not"
 
@@ -98,6 +114,8 @@ and string_of_expr expr =
       ^ " in " ^ string_of_expr expr2
   | App (idfun, expr_list) -> idfun ^ "(" ^ string_of_expr_list expr_list ^ ")"
 
+  | _ -> failwith ""
+
 let rec string_of_var_list var_list =
   match var_list with
   | [] -> ""
@@ -118,4 +136,14 @@ let string_of_programme prog =
     "" prog
 
 
-type env_fonction =( idfun * typ  ) list
+
+(* type utilisé pour vérifie le typage  *)
+(* au début nous avons une liste vide
+dès qu'une variable est trouvé, on l'ajoute ainsi 
+que son type  *)
+(* Associe un type a une variable *)
+type env_type = (idvar * typ) list
+
+type valeur = TInt of int | TFloat of float | TUnit of unit| TBool of bool
+
+type env_fun = (idfun * (typ list * typ)) list

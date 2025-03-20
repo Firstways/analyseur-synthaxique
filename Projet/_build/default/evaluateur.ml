@@ -2,45 +2,6 @@
 open Syntax
 open Verif
 
-type tretour = 
-|Type of typ
-|IdV of idvar
-|IdF of idfun
-| OpBin of binary_op
-| OpUn of unary_op
-| Cond of bool*expr*expr
-| Let of idvar * typ * expr * expr
-| App of idfun * expr list
-
-let  eval_bin_int_op op  = match op with
-  | Plus -> (+)
-  | Minus -> (-)
-  | Mult -> ( * )
-  | Div -> ( / ) 
-  | _ -> failwith "non integer"
-  
-  let  eval_bin_bool_op op  = match op with 
-    | And -> (&&)
-    | Or -> (||)
-    | _ -> failwith "Opérateur non supporté"
-
-  let  eval_bin_comp_op op  = match op with 
-  | Equal -> (=)
-  | NEqual -> (!=)
-  | Less -> (<)
-  | LessEq -> (<=)
-  | Great -> (>)
-  | GreatEq -> (<=)
-  | _ -> failwith ""
-
-let match_un_op op = match op with
-| Not -> (!)
-
-let match_bin_op exp = match  exp with
-| Plus|Minus|Mult|Div -> eval_bin_bool_op exp 
-|Or|And->eval_bin_bool_op exp
-| Equal|NEqual|Less|LessEq|Great|GreatEq-> eval_bin_comp_op exp
-
 
 let eval_fun_args args f =
   match args with
@@ -60,11 +21,19 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
       let v1 = eval_expr env_val env_fun e1 in
       let v2 = eval_expr env_val env_fun e2 in
       match op, v1, v2 with
+
       | Plus, TInt i1, TInt i2 -> TInt (i1 + i2)
       | Minus, TInt i1, TInt i2 -> TInt (i1 - i2)
       | Mult, TInt i1, TInt i2 -> TInt (i1 * i2)
       | Div, TInt i1, TInt i2 when i2 <> 0 -> TInt (i1 / i2)
       | Div, _, TInt 0 -> failwith "Division par zéro"
+
+      | PlusF, TFloat i1, TFloat i2 -> TFloat (i1 +. i2)
+      | MinusF, TFloat i1, TFloat i2 -> TFloat (i1 -. i2)
+      | MultF, TFloat i1, TFloat i2 -> TFloat (i1 *. i2)
+      | DivF, TFloat i1, TFloat i2 -> TFloat (i1 /. i2)
+      | DivF, _, TFloat 0. -> failwith "Division par zéro"
+
       | And, TBool b1, TBool b2 -> TBool (b1 && b2)
       | Or, TBool b1, TBool b2 -> TBool (b1 || b2)
       | Equal, TInt i1, TInt i2 -> TBool (i1 = i2)
@@ -92,24 +61,40 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
       let v1 = eval_expr env_val env_fun e1 in
       let new_env = (x, v1) :: env_val in
       eval_expr new_env env_fun e2
-  | App (_,_) ->
-      (* let func = try List.assoc f env_fun with Not_found -> failwith "Fonction non définie" in
-      let arg_values = List.map (fun e -> eval_expr env_val env_fun e) args in *)
-      (* Pour l'instant, on suppose que la fonction est bien définie *)
-      TInt 0
+  | App (f, args) ->
+    (* Évaluation des appels de fonctions *)
+    let (param_types, _) =
+      try List.assoc f env_fun with Not_found -> failwith ("Fonction non définie : " ^ f)
+    in
+    (* Évaluer les arguments *)
+    let arg_values = List.map (fun e -> eval_expr env_val env_fun e) args in
+    (* Vérifier que le nombre d'arguments correspond au nombre de paramètres *)
+    if List.length args <> List.length param_types then
+      failwith "Nombre d'arguments incorrect"
+    else
+      (* Créer un nouvel environnement avec les paramètres et leurs valeurs *)
+      let param_names = List.mapi (fun i _ -> "param" ^ string_of_int i) param_types in
+      let new_env = List.combine param_names arg_values @ env_val in
+      (* Évaluer le corps de la fonction *)
+      eval_expr new_env env_fun (App (f, args))
+  | _ -> failwith "Erreur d'expression"
+      
 
-
-      type prog = fun_decl list
+type prog = fun_decl list
 
 
   let print_valeur valeur = print_string "\n" ;
     match valeur with
-    |TInt x-> 
+    | TInt x-> 
           print_int x;
           print_string "\n" 
-    |TBool x -> 
+    | TBool x -> 
           print_string (string_of_bool x);
           print_string "\n" 
+    | TFloat x ->
+      print_float x;
+      print_string "\n"
+    | _ -> failwith "type Unit"
 (* Prend en parametre un programme et affiche
 la valeur produite par l'évaluation de la fonction
 main vrai si l'évaluation est correcte, faux sinon*)
@@ -127,15 +112,9 @@ on souhaite que le programme affiche le resultat du programme
 (* 'programme -> unit() *)
 
 
-(* let eval_prog (p : prog) : valeur =
-  let env_val = [] in
-  let env_type = [] in
-  let env_fun = List.map (fun decl -> (decl.id, (List.map (fun (x, t) -> t) decl.var_list, decl.typ_retour))) p in
-  let main_decl = List.find (fun decl -> decl.id = "main") p in
-  let main_body = main_decl.corps in
-  eval_expr env_val  env_fun main_body *)
 
-let eval_prog (p : prog) =
+
+let eval_prog (p : programme) =
   let env_val = [] in
   let env_fun = List.map (fun decl -> (decl.id, (List.map (fun (_, t) -> t) decl.var_list, decl.typ_retour))) p in
   let main_decl = List.find (fun decl -> decl.id = "main") p in

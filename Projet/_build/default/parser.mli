@@ -7,11 +7,15 @@ type token =
   | TINT
   | THEN
   | TBOOL
+  | SEMICOLON
   | RPAR
+  | PLUSF
   | PLUS
   | NOT
   | NEQ
+  | MULTF
   | MULT
+  | MINUSF
   | MINUS
   | LPAR
   | LOR
@@ -28,6 +32,7 @@ type token =
   | EQ
   | EOF
   | ELSE
+  | DIVF
   | DIV
   | COMMA
   | COLON

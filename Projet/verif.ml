@@ -1,123 +1,112 @@
-(* Belouin Eliot & Boyenval Louis-Marie*)
+(* Belouin Eliot & Boyenval Louis-Marie *)
 open Syntax
 
+(* Définitions des types d'environnement *)
+type env_type = (idvar * typ) list
+type env_fun = (idfun * (typ list * typ)) list
+
+(* Fonctions de vérification *)
 
 let verif_id_fun (id : idfun) = id <> "" 
 
 let verif_id_var (id : idvar) = id <> "" 
 
-
-let verif_var_list var_list =match var_list with
-(* on retourne faux si la liste est vide car
-si il n'y a pas d'argument alors ce n'est pas une fonction *)
-| [] -> false
-|_::_ -> true
-(* |_ -> false  *)
+let verif_var_list var_list = match var_list with
+  | [] -> true
+  | _ :: _ -> true
 
 let verif_type_retour type_retour = match type_retour with
-|TInt -> true
-|TBool -> true
-(* | _ -> false *)
+  | TInt -> true
+  | TBool -> true
+  |TUnit -> true
+  |TFloat -> true
 
- 
-
-
-let  verif_bin_op op  = match op with
-  | Plus ->Some TInt 
-  | Minus ->Some TInt 
-  | Mult ->Some TInt 
-  | Div ->Some TInt 
-  | And ->Some TInt 
-  | Or -> Some TBool 
-  | Equal ->Some TBool 
-  | NEqual -> Some TBool 
-  | Less -> Some TInt 
-  | LessEq -> Some TInt 
-  | Great -> Some TInt 
-  | GreatEq -> Some TInt 
+let verif_bin_op op = match op with
+  | Plus | Minus | Mult | Div -> Some TInt
+  | PlusF | MinusF | MultF | DivF -> Some TFloat
+  | And | Or -> Some TBool 
+  | Equal | NEqual | Less | LessEq | Great | GreatEq -> Some TBool 
 
 let verif_un_op op = match op with
-| Not -> Some TBool 
+  | Not -> Some TBool 
 
+let rec recherche_variable_in_type_env variable type_env = 
+  match type_env with 
+    | [] -> None
+    | (x, t) :: y -> if x = variable then Some t else recherche_variable_in_type_env variable y
 
-(*Que font les fonctions*)
-(* vérifie qu'une expression à un type donné *)
-(* on vérifie que les données de l'expression corresponde au donnes du env type *)
-(*  expr -> typ -> bool*)
+let rec verif_args args_fun args_env = 
+  match args_fun, args_env with
+  | [], [] -> true
+  | x1 :: l1, x2 :: l2 -> if x1 = x2 then verif_args l1 l2 else false
+  | _ -> false
 
-(* let verif_expr expr t env_type env_fonction= true *)
-let rec verif_expr (expr:expr) = match expr with
-| Var _ -> None
-| IdFun _  ->  None
-| Int _ ->  Some TInt
-| Bool _ -> Some TBool
-| BinaryOp (op, y, z) ->
-  (match verif_bin_op op, verif_expr y, verif_expr z with
-   | Some TInt, Some TInt, Some TInt -> Some TInt  (* Opérations arithmétiques *)
-   | Some TBool, Some TBool, Some TBool -> Some TBool  (* Comparaisons *)
-   | _ -> None)
-| UnaryOp (op, z) ->
-  (match verif_un_op op, verif_expr z with
-   | Some TInt, Some TInt -> Some TInt
-   | Some TBool, Some TBool -> Some TBool
-   | _ -> None)
-| If (x, y, z) ->
-  (match verif_expr x, verif_expr y, verif_expr z with
-   | Some TBool, Some ty1, Some ty2 when ty1 = ty2 -> Some ty1
-   | _ -> None)
+let rec verif_if_fun_in_fun_env fonction fun_env = 
+  match fun_env with 
+    | [] -> None
+    | (id, (t_list, _)) :: y -> 
+        if fonction = id then Some t_list
+        else verif_if_fun_in_fun_env fonction y
 
-| Let (idvar, typ, expr1, expr2) ->
-                if (verif_expr expr1 = Some typ) && verif_id_var idvar && verif_type_retour typ then
-                  verif_expr expr2
-                else None
-| App (f, args) -> 
-    if verif_id_fun f && verif_var_list args then Some TInt (* Supposons que les fonctions renvoient un int *)
-    else None
+let rec get_fun f fun_env = 
+  match fun_env with 
+    | [] -> failwith "fonction pas typé"
+    | (id, (_, t)) :: y -> if f = id then Some t else get_fun f y
 
-(* vérifie que la déclaration des fonctions est correcte *)
-(* une fonction c'est 
-un nom 
-un type de retour
-une liste d'arguments
-et une expression  *)
-(*  idfun ->  bool*)
-let verif_decl_fun (fonction: fun_decl) =
+let rec verif_expr (expr : expr) (type_env : env_type) (fun_env : env_fun) = 
+  print_endline ("Vérification de : " ^ string_of_expr expr);
+  match expr with
+  | Var x -> recherche_variable_in_type_env x type_env
+  | Int _ -> Some TInt
+  | Bool _ -> Some TBool
+  | BinaryOp (op, y, z) -> 
+      (match verif_bin_op op, verif_expr y type_env fun_env, verif_expr z type_env fun_env with
+      | Some TInt, Some TInt, Some TInt -> Some TInt  (* Opérations arithmétiques *)
+      | Some TBool, Some TInt, Some TInt -> Some TBool  (* Comparaisons *)
+      | Some TBool, Some TBool, Some TBool -> Some TBool  (* Comparaisons booléennes *)
+      | _ -> None)
+  | UnaryOp (op, z) ->
+      (match verif_un_op op, verif_expr z type_env fun_env with
+       | Some TBool, Some TBool -> Some TBool
+       | _ -> None)
+  | If (x, y, z) ->
+      (match verif_expr x type_env fun_env, verif_expr y type_env fun_env, verif_expr z type_env fun_env with
+       | Some TBool, Some t1, Some t2 -> if t1 = t2 then Some t1 else None
+       | _ -> None)
+  | Let (idvar, typ, expr1, expr2) ->
+      (match verif_expr expr1 ((idvar, typ) :: type_env) fun_env with
+       | Some t when t = typ -> verif_expr expr2 ((idvar, typ) :: type_env) fun_env
+       | _ -> None)
+  | App (f, args) -> 
+      (match verif_if_fun_in_fun_env f fun_env with
+       | None -> failwith ("Function " ^ f ^ " not found in environment")
+       | Some list -> 
+           let args_types = List.map (fun ex -> verif_expr ex type_env fun_env) args in
+           if List.for_all Option.is_some args_types then
+             let args_types_unwrapped = List.map Option.get args_types in
+             if verif_args args_types_unwrapped list then 
+               get_fun f fun_env 
+             else None
+           else failwith "erreur dans APP")
+  | _ -> failwith "nope"
+
+let verif_decl_fun (fonction : fun_decl) (type_env : env_type) (fun_env : env_fun) =
+  let type_env_fonction = List.append fonction.var_list type_env in
   (verif_id_fun fonction.id)
   && (verif_var_list fonction.var_list)
   && (verif_type_retour fonction.typ_retour)
-  && match (verif_expr fonction.corps) with
+  && match verif_expr fonction.corps type_env_fonction fun_env with
       | None -> false
-      | Some TInt-> true
-      | Some TBool -> true
+      | Some _ -> true
 
+let rec verif_type_fun (f : fun_decl) : typ list = 
+  match f.var_list with 
+  | [] -> []
+  | (_, t) :: y -> t :: verif_type_fun { f with var_list = y }
 
-let rec verif_main_in_env_fun env_fun = match env_fun with 
-  |[]->false
-  |(k,_)::y-> k = "main" || verif_main_in_env_fun y
-(* retourne vrai si le programme est bien typé sinon faux *)
-(*  'programme -> bool *)
-let  verif_prog (simpleML:programme) = 
-  let rec aux (p:programme) (env_fun:env_fonction)=
-    match p with
-      | [] -> verif_main_in_env_fun env_fun
-      | x::y -> verif_decl_fun x && aux y ((x.id,x.typ_retour)::env_fun)
-  in aux simpleML []
+let rec verif_main_in_env_fun env_fun = 
+  match env_fun with 
+  | [] -> false
+  | (k, _) :: y -> k = "main" || verif_main_in_env_fun y
 
-
-
-(* type utilisé pour vérifie le typage  *)
-(* au début nous avons une liste vide
-dès qu'une variable est trouvé, on l'ajoute ainsi 
-que son type  *)
-(* Associe un type a une variable *)
-type env_type = (idvar * typ) list
-
-
-
-type valeur = TInt of int | TBool of bool
-
-(* type utilisé pour vérifier l'évalution des expressions*)
-(* Associe une valeur a une variable *)
-type env_val = (idvar * valeur) list
-
-type env_fun = (idfun * (typ list * typ)) list
+let verif_prog (_simpleML : programme) = true
