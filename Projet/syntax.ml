@@ -125,7 +125,6 @@ let string_of_programme prog =
     "" prog
 
 
-type env_fonction =( idfun * typ  ) list
 
 (* type utilisé pour vérifie le typage  *)
 (* au début nous avons une liste vide
