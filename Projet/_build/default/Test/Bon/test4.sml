@@ -1,6 +1,3 @@
-
-
-
-let main() : int = print_int 3
+let main() : float = 4.6 +. 2.5
 
 

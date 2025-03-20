@@ -1,8 +1,10 @@
 type token =
     VAR of string
+  | TUNIT
   | TRUE
   | TINT
   | THEN
+  | TFLOAT
   | TBOOL
   | SEMICOLON
   | RPAR
@@ -25,6 +27,7 @@ type token =
   | IF
   | GREATEQ
   | GREAT
+  | FLOAT of float
   | FALSE
   | EQ
   | EOF

@@ -3,9 +3,11 @@
 
 type token = 
   | VAR of (Syntax.idvar)
+  | TUNIT
   | TRUE
   | TINT
   | THEN
+  | TFLOAT
   | TBOOL
   | SEMICOLON
   | RPAR
@@ -28,6 +30,7 @@ type token =
   | IF
   | GREATEQ
   | GREAT
+  | FLOAT of (float)
   | FALSE
   | EQ
   | EOF

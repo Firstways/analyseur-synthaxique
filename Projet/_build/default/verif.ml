@@ -19,11 +19,11 @@ si il n'y a pas d'argument alors ce n'est pas une fonction *)
 |_::_ -> true
 (* |_ -> false  *)
 
-let verif_type_retour type_retour = match type_retour with
+let verif_type_retour (type_retour:typ) = match type_retour with
 |TInt -> true
 |TBool -> true
-|TUnit -> true
-|TFloat -> true
+|TUnit  -> true
+|TFloat  -> true
 (* | _ -> false *)
 
  
@@ -162,12 +162,4 @@ let verif_prog (simpleML: programme) =
   in
   verifier_fonctions simpleML
 
-
-
-
-type valeur = TInt of int | TBool of bool
-
-(* type utilisé pour vérifier l'évalution des expressions*)
-(* Associe une valeur a une variable *)
-type env_val = (idvar * valeur) list
 
