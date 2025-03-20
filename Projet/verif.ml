@@ -23,6 +23,7 @@ let verif_type_retour type_retour = match type_retour with
 |TInt -> true
 |TBool -> true
 |TUnit -> true
+|TFloat -> true
 (* | _ -> false *)
 
  
@@ -30,6 +31,7 @@ let verif_type_retour type_retour = match type_retour with
 
 let  verif_bin_op op  = match op with
   | Plus | Minus | Mult | Div -> Some TInt 
+  | PlusF | MinusF | MultF | DivF -> Some TFloat
   | And | Or -> Some TBool 
   | Equal | NEqual | Less | LessEq | Great | GreatEq -> Some TBool 
 
@@ -58,12 +60,13 @@ let rec verif_args args_fun args_env =
   |x1::l1,x2::l2 -> if x1 = x2 then verif_args l1 l2 else false
   |_ -> false
 
-let rec verif_if_fun_in_fun_env fonction fun_env = 
-  match fun_env with 
-  | [] -> None  (* Au lieu de `[]`, on retourne `None` *)
-  | (id, (t_list, _)) :: y -> 
-      if fonction = id then Some t_list
-      else verif_if_fun_in_fun_env fonction y
+  let rec verif_if_fun_in_fun_env fonction fun_env = 
+    match fun_env with 
+    | [] -> None
+    | (id, (t_list, _)) :: y -> 
+        if fonction = id then Some t_list  (* Correction ici *)
+        else verif_if_fun_in_fun_env fonction y
+  
 
 (* Donne le type de retour d'une fonction *)
 let rec get_fun  f fun_env = 
@@ -87,7 +90,7 @@ match expr with
   | Some TInt, Some TInt, Some TInt -> Some TInt  (* Opérations arithmétiques *)
   | Some TBool, Some TInt, Some TInt -> Some TBool  (* Comparaisons : >, <, =, <> ... ✅ Ajouté *)
   | Some TBool, Some TBool, Some TBool -> Some TBool  (* Comparaisons booléennes *)
-  | _ -> Some TBool)
+  | _ -> None)
 
 | UnaryOp (op, z) ->
   (match verif_un_op op, verif_expr z type_env fun_env with
@@ -124,12 +127,13 @@ match expr with
 
 (*  idfun ->  bool*)
 let verif_decl_fun (fonction: fun_decl) (type_env:env_type) (fun_env:env_fun) =
+  let type_env_fonction = List.append fonction.var_list type_env in
   (verif_id_fun fonction.id)
   && (verif_var_list fonction.var_list)
   && (verif_type_retour fonction.typ_retour)
-  && match (verif_expr fonction.corps type_env fun_env)  with
+  && match (verif_expr fonction.corps type_env_fonction fun_env) with
       | None -> false
-      | Some _-> true
+      | Some _ -> true
 
 
   let rec verif_type_fun (f: fun_decl) : typ list = 

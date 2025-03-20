@@ -7,6 +7,7 @@
 %token <int> INT
 %token <Syntax.idvar> VAR
 %token EQ
+%token PLUSF MINUSF MULTF DIVF
 %token PLUS MINUS MULT DIV
 %token LAND LOR NOT
 %token NEQ GREAT GREATEQ LESS LESSEQ
@@ -28,6 +29,7 @@
 %left PLUS MINUS
 %left MULT DIV
 %left SEMICOLON
+%left PLUSF MINUSF MULTF DIVF
 
 %start prog
 %type <Syntax.programme> prog
@@ -64,6 +66,10 @@ expr:
   | expr MINUS expr    { BinaryOp (Minus, $1, $3) }
   | expr MULT expr     { BinaryOp (Mult, $1, $3) }
   | expr DIV expr      { BinaryOp (Div, $1, $3) }
+  | expr PLUSF expr   {BinaryOp (PlusF,$1,$3)}
+  | expr MINUSF expr   {BinaryOp (MinusF,$1,$3)}
+  | expr MULTF expr   {BinaryOp (MultF,$1,$3)}
+  | expr DIVF expr   {BinaryOp (DivF,$1,$3)}
   | NOT expr          { UnaryOp (Not, $2) }
   | expr LAND expr     { BinaryOp (And, $1, $3) }
   | expr LOR expr      { BinaryOp (Or, $1, $3) }

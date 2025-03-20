@@ -1,7 +1,7 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
 
 (* typ représente les types de SimpleML *)
-type typ = TInt | TBool | TUnit
+type typ = TInt | TBool | TUnit | TFloat
 
 (* Définition de l'arbre de syntaxe abstrait des expressions de SimpleML *)
 
@@ -26,6 +26,10 @@ type binary_op =
   | LessEq
   | Great
   | GreatEq
+  | PlusF
+  | MinusF
+  | MultF
+  | DivF
 
 type unary_op = Not
 
@@ -40,6 +44,7 @@ type expr =
   | Let of idvar * typ * expr * expr
   | App of idfun * expr list
   | Seq of expr * expr
+
 
 
 (* Définition du type des déclarations de fonction de SimpleML *)
@@ -62,6 +67,7 @@ let string_of_type typ = match typ with
 |TInt -> "int" 
 | TBool -> "bool"
 | TUnit -> "unit"
+| TFloat -> "float"
 
 let string_of_binary_op binop =
   match binop with
@@ -77,6 +83,11 @@ let string_of_binary_op binop =
   | LessEq -> "<="
   | Great -> ">"
   | GreatEq -> ">="
+  | PlusF -> "+."
+  | MinusF -> "-."
+  | MultF -> "*."
+  | DivF -> "/."
+
 
 let string_of_unary_op unop = match unop with Not -> "not"
 

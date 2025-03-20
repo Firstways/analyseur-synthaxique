@@ -28,6 +28,11 @@ rule token = parse
   | '*'  { MULT }
   | '/'  { DIV }
 
+  | "+."  { PLUSF }
+  | "-."  { MINUSF }
+  | "*."  { MULTF }
+  | "/."  { DIVF }
+
   | "true" { TRUE }
   | "false" { FALSE }
   | "&&" { LAND }

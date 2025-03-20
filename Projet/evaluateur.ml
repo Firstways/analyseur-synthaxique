@@ -18,6 +18,14 @@ let  eval_bin_int_op op  = match op with
   | Mult -> ( * )
   | Div -> ( / ) 
   | _ -> failwith "non integer"
+
+
+let  eval_bin_float_op op  = match op with
+| Plus -> (+.)
+| Minus -> (-.)
+| Mult -> ( *. )
+| Div -> ( /. ) 
+| _ -> failwith "non float"
   
   let  eval_bin_bool_op op  = match op with 
     | And -> (&&)
@@ -38,6 +46,7 @@ let match_un_op op = match op with
 
 let match_bin_op exp = match  exp with
 | Plus|Minus|Mult|Div -> eval_bin_bool_op exp 
+| PlusF|MinusF|MultF|DivF -> eval_bin_bool_op exp 
 |Or|And->eval_bin_bool_op exp
 | Equal|NEqual|Less|LessEq|Great|GreatEq-> eval_bin_comp_op exp
 
