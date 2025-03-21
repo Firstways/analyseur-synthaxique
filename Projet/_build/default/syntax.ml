@@ -38,6 +38,7 @@ type expr =
   | IdFun of idfun
   | Int of int
   | Bool of bool
+  | Float of float
   | BinaryOp of binary_op * expr * expr
   | UnaryOp of unary_op * expr
   | If of expr * expr * expr
@@ -64,10 +65,11 @@ type programme = fun_decl list
 (* Fonctions d'affichage pour la syntaxe de SimpleML *)
 
 let string_of_type typ = match typ with 
-|TInt -> "int" 
+| TInt -> "int" 
 | TBool -> "bool"
 | TUnit -> "unit"
 | TFloat -> "float"
+
 
 let string_of_binary_op binop =
   match binop with
@@ -144,6 +146,11 @@ que son type  *)
 (* Associe un type a une variable *)
 type env_type = (idvar * typ) list
 
-type valeur = TInt of int | TFloat of float | TUnit of unit| TBool of bool
 
 type env_fun = (idfun * (typ list * typ)) list
+
+type env_decl = (idfun * fun_decl) list
+
+
+(* type env_val = (idvar * valeur) list *)
+type valeur = VInt of int | VBool of bool | VUnit | VFloat of float

@@ -1,4 +1,4 @@
-# dune build
+# dune exec -- ./eval.exe Test/Bon/test4.sml
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
 # Shared cache location: /comptes/E214694N/.cache/dune/db
@@ -14,11 +14,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /comptes/E214694N/.opam/default/bin/ocamlc.opt -config > /tmp/dune_354873_output
-$ (cd _build/default && /comptes/E214694N/.opam/default/bin/ocamldep.opt -modules -impl syntax.ml) > _build/default/.eval.eobjs/dune__exe__Syntax.impl.d
-$ (cd _build/default && /comptes/E214694N/.opam/default/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -bin-annot-occurrences -I .eval.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o .eval.eobjs/byte/dune__exe__Syntax.cmo -c -impl syntax.ml)
-$ (cd _build/.sandbox/dc884f18dd8362d0a5826be59643e39b/default && /comptes/E214694N/.opam/default/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I .eval.eobjs/byte -open Dune__exe -short-paths -i -impl parser__mock.ml.mock) > _build/.sandbox/dc884f18dd8362d0a5826be59643e39b/default/parser__mock.mli.inferred
-> File "parser.mly", line 44, characters 17-25:
-> Error: The constructor TInt expects 1 argument(s),
->        but is applied here to 0 argument(s)
-[2]
+$ /home/luminary/.opam/prog/bin/ocamlc.opt -config > /tmp/dune_4b6c8f_output

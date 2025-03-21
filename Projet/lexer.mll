@@ -56,6 +56,8 @@ rule token = parse
 
   | "int" { TINT }
   | "bool" { TBOOL }
+  | "float" { TFLOAT }
+  | "unit" { TUNIT }
 
 
   | '('  { LPAR }
@@ -68,6 +70,7 @@ rule token = parse
 
 
   | integer as n  { INT (int_of_string n) }
+  | integer '.' integer? as f  { FLOAT (float_of_string f) }
   | ident as id  { VAR id }
 
   | _  { raise Error }

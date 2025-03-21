@@ -7,3 +7,4 @@ let f (x:int) : int =
 let main() : int = f(9)
 
 (* main() s'évalue vers 17 *)
+

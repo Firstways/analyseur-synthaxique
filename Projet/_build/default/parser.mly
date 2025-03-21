@@ -5,6 +5,8 @@
 
 %token EOF
 %token <int> INT
+%token <float> FLOAT
+
 %token <Syntax.idvar> VAR
 %token EQ
 %token PLUSF MINUSF MULTF DIVF
@@ -18,6 +20,10 @@
 
 %token TINT
 %token TBOOL
+%token TFLOAT
+%token TUNIT
+
+%token SEMICOLON
 
 %token SEMICOLON
 
@@ -42,7 +48,8 @@ prog: list_implem_decl; EOF  { $1 }
 ty:
   | TBOOL        { TBool }
   | TINT         { TInt }
-
+  | TFLOAT       { TFloat }
+  | TUNIT       { TUnit }
 fun_decl:
   | LET VAR LPAR list_typed_ident RPAR COLON ty EQ expr
     { {id = $2 ; var_list = $4 ; typ_retour = $7; corps = $9} }
@@ -55,6 +62,7 @@ list_implem_decl:
 expr:
   | VAR             { Var $1 }
   | INT             { Int $1 }
+  | FLOAT           { Float $1 }
   | TRUE            { Bool true }
   | FALSE           { Bool false }
   | LPAR expr RPAR   { $2 }
