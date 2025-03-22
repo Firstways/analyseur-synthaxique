@@ -1,17 +1,9 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
 open Syntax
-open Verif
 
-
-let eval_fun_args args f =
-  match args with
-  | [] -> None 
-  | x :: xs -> Some (List.fold_left f x xs)
-
-(* Fonction prenant en parametre une expression et
-fourni un résultat en sortie *)
-(* expr -> valeur *)
-let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
+(* Fonction prenant en paramètre une expression et fournissant un résultat en sortie *)
+(* expr -> (idvar * valeur) list -> (idfun * fun_decl) list -> valeur  *)
+let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * fun_decl) list) =
   match e with
   | Var x -> (try List.assoc x env with Not_found -> failwith ("Variable non définie : " ^ x))
   | Int n -> VInt n
@@ -20,31 +12,24 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
       let v1 = eval_expr e1 env env_fun in
       let v2 = eval_expr e2 env env_fun in
       match op, v1, v2 with
-
-      | Plus, TInt i1, TInt i2 -> TInt (i1 + i2)
-      | Minus, TInt i1, TInt i2 -> TInt (i1 - i2)
-      | Mult, TInt i1, TInt i2 -> TInt (i1 * i2)
-      | Div, TInt i1, TInt i2 when i2 <> 0 -> TInt (i1 / i2)
-      | Div, _, TInt 0 -> failwith "Division par zéro"
-
-      | PlusF, TFloat i1, TFloat i2 -> TFloat (i1 +. i2)
-      | MinusF, TFloat i1, TFloat i2 -> TFloat (i1 -. i2)
-      | MultF, TFloat i1, TFloat i2 -> TFloat (i1 *. i2)
-      | DivF, TFloat i1, TFloat i2 -> TFloat (i1 /. i2)
-      | DivF, _, TFloat 0. -> failwith "Division par zéro"
-
-      | And, TBool b1, TBool b2 -> TBool (b1 && b2)
-      | Or, TBool b1, TBool b2 -> TBool (b1 || b2)
-      | Equal, TInt i1, TInt i2 -> TBool (i1 = i2)
-      | Equal, TBool b1, TBool b2 -> TBool (b1 = b2)
-      | NEqual, TInt i1, TInt i2 -> TBool (i1 <> i2)
-      | NEqual, TBool b1, TBool b2 -> TBool (b1 <> b2)
-      | Less, TInt i1, TInt i2 -> TBool (i1 < i2)
-      | LessEq, TInt i1, TInt i2 -> TBool (i1 <= i2)
-      | Great, TInt i1, TInt i2 -> TBool (i1 > i2)
-      | GreatEq, TInt i1, TInt i2 -> TBool (i1 >= i2)
-      | _, _, _ -> failwith "Opération sur des types incompatibles" end
-
+      | Plus, VInt i1, VInt i2 -> VInt (i1 + i2)
+      | Minus, VInt i1, VInt i2 -> VInt (i1 - i2)
+      | Mult, VInt i1, VInt i2 -> VInt (i1 * i2)
+      | Div, VInt i1, VInt i2 when i2 <> 0 -> VInt (i1 / i2)
+      | Div, _, VInt 0 -> failwith "Division par zéro"
+      | And, VBool b1, VBool b2 -> VBool (b1 && b2)
+      | Or, VBool b1, VBool b2 -> VBool (b1 || b2)
+      | Equal, VInt i1, VInt i2 -> VBool (i1 = i2)
+      | Equal, VBool b1, VBool b2 -> VBool (b1 = b2)
+      | NEqual, VInt i1, VInt i2 -> VBool (i1 <> i2)
+      | NEqual, VBool b1, VBool b2 -> VBool (b1 <> b2)
+      | Less, VInt i1, VInt i2 -> VBool (i1 < i2)
+      | LessEq, VInt i1, VInt i2 -> VBool (i1 <= i2)
+      | Great, VInt i1, VInt i2 -> VBool (i1 > i2)
+      | GreatEq, VInt i1, VInt i2 -> VBool (i1 >= i2)
+      | PlusF, VFloat n1, VFloat n2 -> VFloat (n1 +. n2) 
+      | _, _, _ -> failwith "Opération sur des types incompatibles"
+    end
   | UnaryOp (Not, e1) -> begin
       match eval_expr e1 env env_fun with
       | VBool b -> VBool (not b)
@@ -71,6 +56,8 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
   | Seq (_, _) -> failwith "to do"
   | _ -> failwith "to do"
 
+(*    Affiche une valeur sur la sortie standard *)
+(* valeur -> unit *)
 let print_valeur valeur =
   match valeur with
   | VInt x -> print_int x; print_newline()
@@ -78,6 +65,8 @@ let print_valeur valeur =
   | VFloat x -> print_float x; print_newline()
   | _ -> failwith "Valeur non prise en charge"
 
+(*  Évalue un programme en exécutant la fonction 'main' si elle est définie. *)
+(* programme -> unit *)
 let eval_prog (p : programme) =
   let env_fun = List.map (fun f -> (f.id, f)) p in
   match List.assoc_opt "main" env_fun with

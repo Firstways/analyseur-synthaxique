@@ -1,10 +1,10 @@
-# dune exec -- ./eval.exe Test/Bon/test4.sml
+# dune exec -- ./eval.exe Test/Mauvais/test1.sml
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
-# Shared cache location: /comptes/E214694N/.cache/dune/db
-# Workspace root:
-# /comptes/E214694N/Documents/L3_INFO/PF/Projet/analyseur-synthaxique/Projet
-# Auto-detected concurrency: 4
+# Shared cache location: /home/luminary/.cache/dune/db
+# Workspace root: "/home/luminary/Documents/L3/Semestre 2/Programmation
+# fonctionnel/Projet/analyseur-synthaxique/Projet"
+# Auto-detected concurrency: 8
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -14,4 +14,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /home/luminary/.opam/prog/bin/ocamlc.opt -config > /tmp/dune_4b6c8f_output
+$ /home/luminary/.opam/prog/bin/ocamlc.opt -config > /tmp/dune_0ab373_output

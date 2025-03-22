@@ -152,5 +152,5 @@ type env_fun = (idfun * (typ list * typ)) list
 type env_decl = (idfun * fun_decl) list
 
 
-(* type env_val = (idvar * valeur) list *)
 type valeur = VInt of int | VBool of bool | VUnit | VFloat of float
+type env_val = (idvar * valeur) list

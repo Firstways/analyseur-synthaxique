@@ -277,7 +277,7 @@ and _menhir_box_prog =
 let _menhir_action_01 =
   fun _1 _3 ->
     (
-# 91 "parser.mly"
+# 92 "parser.mly"
                             ( App (_1, _3) )
 # 283 "parser.ml"
      : (Syntax.expr))
@@ -285,7 +285,7 @@ let _menhir_action_01 =
 let _menhir_action_02 =
   fun _1 ->
     (
-# 61 "parser.mly"
+# 62 "parser.mly"
                     ( Var _1 )
 # 291 "parser.ml"
      : (Syntax.expr))
@@ -293,7 +293,7 @@ let _menhir_action_02 =
 let _menhir_action_03 =
   fun _1 ->
     (
-# 62 "parser.mly"
+# 63 "parser.mly"
                     ( Int _1 )
 # 299 "parser.ml"
      : (Syntax.expr))
@@ -301,7 +301,7 @@ let _menhir_action_03 =
 let _menhir_action_04 =
   fun _1 ->
     (
-# 63 "parser.mly"
+# 64 "parser.mly"
                     ( Float _1 )
 # 307 "parser.ml"
      : (Syntax.expr))
@@ -309,7 +309,7 @@ let _menhir_action_04 =
 let _menhir_action_05 =
   fun () ->
     (
-# 64 "parser.mly"
+# 65 "parser.mly"
                     ( Bool true )
 # 315 "parser.ml"
      : (Syntax.expr))
@@ -317,7 +317,7 @@ let _menhir_action_05 =
 let _menhir_action_06 =
   fun () ->
     (
-# 65 "parser.mly"
+# 66 "parser.mly"
                     ( Bool false )
 # 323 "parser.ml"
      : (Syntax.expr))
@@ -325,7 +325,7 @@ let _menhir_action_06 =
 let _menhir_action_07 =
   fun _2 ->
     (
-# 66 "parser.mly"
+# 67 "parser.mly"
                      ( _2 )
 # 331 "parser.ml"
      : (Syntax.expr))
@@ -333,7 +333,7 @@ let _menhir_action_07 =
 let _menhir_action_08 =
   fun _1 ->
     (
-# 67 "parser.mly"
+# 68 "parser.mly"
              ( _1 )
 # 339 "parser.ml"
      : (Syntax.expr))
@@ -341,7 +341,7 @@ let _menhir_action_08 =
 let _menhir_action_09 =
   fun _2 _4 _6 ->
     (
-# 68 "parser.mly"
+# 69 "parser.mly"
                                        ( If (_2, _4, _6) )
 # 347 "parser.ml"
      : (Syntax.expr))
@@ -349,7 +349,7 @@ let _menhir_action_09 =
 let _menhir_action_10 =
   fun _10 _3 _5 _8 ->
     (
-# 70 "parser.mly"
+# 71 "parser.mly"
     ( Let (_3, _5, _8, _10) )
 # 355 "parser.ml"
      : (Syntax.expr))
@@ -357,7 +357,7 @@ let _menhir_action_10 =
 let _menhir_action_11 =
   fun _1 _3 ->
     (
-# 71 "parser.mly"
+# 72 "parser.mly"
                        ( BinaryOp (Plus, _1, _3) )
 # 363 "parser.ml"
      : (Syntax.expr))
@@ -365,7 +365,7 @@ let _menhir_action_11 =
 let _menhir_action_12 =
   fun _1 _3 ->
     (
-# 72 "parser.mly"
+# 73 "parser.mly"
                        ( BinaryOp (Minus, _1, _3) )
 # 371 "parser.ml"
      : (Syntax.expr))
@@ -373,7 +373,7 @@ let _menhir_action_12 =
 let _menhir_action_13 =
   fun _1 _3 ->
     (
-# 73 "parser.mly"
+# 74 "parser.mly"
                        ( BinaryOp (Mult, _1, _3) )
 # 379 "parser.ml"
      : (Syntax.expr))
@@ -381,7 +381,7 @@ let _menhir_action_13 =
 let _menhir_action_14 =
   fun _1 _3 ->
     (
-# 74 "parser.mly"
+# 75 "parser.mly"
                        ( BinaryOp (Div, _1, _3) )
 # 387 "parser.ml"
      : (Syntax.expr))
@@ -389,7 +389,7 @@ let _menhir_action_14 =
 let _menhir_action_15 =
   fun _1 _3 ->
     (
-# 75 "parser.mly"
+# 76 "parser.mly"
                       (BinaryOp (PlusF,_1,_3))
 # 395 "parser.ml"
      : (Syntax.expr))
@@ -397,7 +397,7 @@ let _menhir_action_15 =
 let _menhir_action_16 =
   fun _1 _3 ->
     (
-# 76 "parser.mly"
+# 77 "parser.mly"
                        (BinaryOp (MinusF,_1,_3))
 # 403 "parser.ml"
      : (Syntax.expr))
@@ -405,7 +405,7 @@ let _menhir_action_16 =
 let _menhir_action_17 =
   fun _1 _3 ->
     (
-# 77 "parser.mly"
+# 78 "parser.mly"
                       (BinaryOp (MultF,_1,_3))
 # 411 "parser.ml"
      : (Syntax.expr))
@@ -413,7 +413,7 @@ let _menhir_action_17 =
 let _menhir_action_18 =
   fun _1 _3 ->
     (
-# 78 "parser.mly"
+# 79 "parser.mly"
                      (BinaryOp (DivF,_1,_3))
 # 419 "parser.ml"
      : (Syntax.expr))
@@ -421,7 +421,7 @@ let _menhir_action_18 =
 let _menhir_action_19 =
   fun _2 ->
     (
-# 79 "parser.mly"
+# 80 "parser.mly"
                       ( UnaryOp (Not, _2) )
 # 427 "parser.ml"
      : (Syntax.expr))
@@ -429,7 +429,7 @@ let _menhir_action_19 =
 let _menhir_action_20 =
   fun _1 _3 ->
     (
-# 80 "parser.mly"
+# 81 "parser.mly"
                        ( BinaryOp (And, _1, _3) )
 # 435 "parser.ml"
      : (Syntax.expr))
@@ -437,7 +437,7 @@ let _menhir_action_20 =
 let _menhir_action_21 =
   fun _1 _3 ->
     (
-# 81 "parser.mly"
+# 82 "parser.mly"
                        ( BinaryOp (Or, _1, _3) )
 # 443 "parser.ml"
      : (Syntax.expr))
@@ -445,7 +445,7 @@ let _menhir_action_21 =
 let _menhir_action_22 =
   fun _1 _3 ->
     (
-# 82 "parser.mly"
+# 83 "parser.mly"
                       ( BinaryOp (Equal, _1, _3) )
 # 451 "parser.ml"
      : (Syntax.expr))
@@ -453,7 +453,7 @@ let _menhir_action_22 =
 let _menhir_action_23 =
   fun _1 _3 ->
     (
-# 83 "parser.mly"
+# 84 "parser.mly"
                       ( BinaryOp (NEqual, _1, _3) )
 # 459 "parser.ml"
      : (Syntax.expr))
@@ -461,7 +461,7 @@ let _menhir_action_23 =
 let _menhir_action_24 =
   fun _1 _3 ->
     (
-# 84 "parser.mly"
+# 85 "parser.mly"
                        ( BinaryOp (Great, _1, _3) )
 # 467 "parser.ml"
      : (Syntax.expr))
@@ -469,7 +469,7 @@ let _menhir_action_24 =
 let _menhir_action_25 =
   fun _1 _3 ->
     (
-# 85 "parser.mly"
+# 86 "parser.mly"
                        ( BinaryOp (GreatEq, _1, _3) )
 # 475 "parser.ml"
      : (Syntax.expr))
@@ -477,7 +477,7 @@ let _menhir_action_25 =
 let _menhir_action_26 =
   fun _1 _3 ->
     (
-# 86 "parser.mly"
+# 87 "parser.mly"
                       ( BinaryOp (Less, _1, _3) )
 # 483 "parser.ml"
      : (Syntax.expr))
@@ -485,7 +485,7 @@ let _menhir_action_26 =
 let _menhir_action_27 =
   fun _1 _3 ->
     (
-# 87 "parser.mly"
+# 88 "parser.mly"
                       ( BinaryOp (LessEq, _1, _3) )
 # 491 "parser.ml"
      : (Syntax.expr))
@@ -493,7 +493,7 @@ let _menhir_action_27 =
 let _menhir_action_28 =
   fun _1 _3 ->
     (
-# 88 "parser.mly"
+# 89 "parser.mly"
                         ( Seq (_1, _3) )
 # 499 "parser.ml"
      : (Syntax.expr))
@@ -501,7 +501,7 @@ let _menhir_action_28 =
 let _menhir_action_29 =
   fun _2 _4 _7 _9 ->
     (
-# 53 "parser.mly"
+# 54 "parser.mly"
     ( {id = _2 ; var_list = _4 ; typ_retour = _7; corps = _9} )
 # 507 "parser.ml"
      : (Syntax.fun_decl))
@@ -509,7 +509,7 @@ let _menhir_action_29 =
 let _menhir_action_30 =
   fun () ->
     (
-# 97 "parser.mly"
+# 98 "parser.mly"
      ( [] )
 # 515 "parser.ml"
      : (Syntax.expr list))
@@ -517,7 +517,7 @@ let _menhir_action_30 =
 let _menhir_action_31 =
   fun _1 ->
     (
-# 98 "parser.mly"
+# 99 "parser.mly"
          ( [_1] )
 # 523 "parser.ml"
      : (Syntax.expr list))
@@ -525,7 +525,7 @@ let _menhir_action_31 =
 let _menhir_action_32 =
   fun _1 _3 ->
     (
-# 99 "parser.mly"
+# 100 "parser.mly"
                          (_1::_3)
 # 531 "parser.ml"
      : (Syntax.expr list))
@@ -533,7 +533,7 @@ let _menhir_action_32 =
 let _menhir_action_33 =
   fun () ->
     (
-# 56 "parser.mly"
+# 57 "parser.mly"
      ( [] )
 # 539 "parser.ml"
      : (Syntax.programme))
@@ -541,7 +541,7 @@ let _menhir_action_33 =
 let _menhir_action_34 =
   fun _1 _2 ->
     (
-# 57 "parser.mly"
+# 58 "parser.mly"
                               (_2::_1)
 # 547 "parser.ml"
      : (Syntax.programme))
@@ -549,7 +549,7 @@ let _menhir_action_34 =
 let _menhir_action_35 =
   fun () ->
     (
-# 102 "parser.mly"
+# 103 "parser.mly"
      ( [] )
 # 555 "parser.ml"
      : ((string * Syntax.typ) list))
@@ -557,7 +557,7 @@ let _menhir_action_35 =
 let _menhir_action_36 =
   fun _1 ->
     (
-# 103 "parser.mly"
+# 104 "parser.mly"
                 ( [_1] )
 # 563 "parser.ml"
      : ((string * Syntax.typ) list))
@@ -565,7 +565,7 @@ let _menhir_action_36 =
 let _menhir_action_37 =
   fun _1 _3 ->
     (
-# 104 "parser.mly"
+# 105 "parser.mly"
                                          (_1::_3)
 # 571 "parser.ml"
      : ((string * Syntax.typ) list))
@@ -573,7 +573,7 @@ let _menhir_action_37 =
 let _menhir_action_38 =
   fun _1 ->
     (
-# 44 "parser.mly"
+# 45 "parser.mly"
                              ( _1 )
 # 579 "parser.ml"
      : (Syntax.programme))
@@ -581,7 +581,7 @@ let _menhir_action_38 =
 let _menhir_action_39 =
   fun () ->
     (
-# 47 "parser.mly"
+# 48 "parser.mly"
                  ( TBool )
 # 587 "parser.ml"
      : (Syntax.typ))
@@ -589,7 +589,7 @@ let _menhir_action_39 =
 let _menhir_action_40 =
   fun () ->
     (
-# 48 "parser.mly"
+# 49 "parser.mly"
                  ( TInt )
 # 595 "parser.ml"
      : (Syntax.typ))
@@ -597,7 +597,7 @@ let _menhir_action_40 =
 let _menhir_action_41 =
   fun () ->
     (
-# 49 "parser.mly"
+# 50 "parser.mly"
                  ( TFloat )
 # 603 "parser.ml"
      : (Syntax.typ))
@@ -605,7 +605,7 @@ let _menhir_action_41 =
 let _menhir_action_42 =
   fun () ->
     (
-# 50 "parser.mly"
+# 51 "parser.mly"
                 ( TUnit )
 # 611 "parser.ml"
      : (Syntax.typ))
@@ -613,7 +613,7 @@ let _menhir_action_42 =
 let _menhir_action_43 =
   fun _1 _3 ->
     (
-# 94 "parser.mly"
+# 95 "parser.mly"
                  ( (_1,_3) )
 # 619 "parser.ml"
      : (string * Syntax.typ))
@@ -2760,7 +2760,6 @@ let prog =
     let MenhirBox_prog v = _menhir_run_00 _menhir_stack _menhir_lexbuf _menhir_lexer in
     v
 
-# 106 "parser.mly"
+# 107 "parser.mly"
   
-
-# 2767 "parser.ml"
+# 2766 "parser.ml"

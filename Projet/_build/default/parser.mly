@@ -25,7 +25,6 @@
 
 %token SEMICOLON
 
-%token SEMICOLON
 
 %left ELSE IN
 %nonassoc NOT

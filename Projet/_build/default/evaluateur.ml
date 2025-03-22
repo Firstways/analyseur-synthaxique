@@ -1,17 +1,9 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
 open Syntax
-open Verif
 
-
-let eval_fun_args args f =
-  match args with
-  | [] -> None 
-  | x :: xs -> Some (List.fold_left f x xs)
-
-(* Fonction prenant en parametre une expression et
-fourni un résultat en sortie *)
-(* expr -> valeur *)
-let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
+(* Fonction prenant en paramètre une expression et fournissant un résultat en sortie *)
+(* expr -> (idvar * valeur) list -> (idfun * fun_decl) list -> valeur  *)
+let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * fun_decl) list) =
   match e with
   | Var x -> (try List.assoc x env with Not_found -> failwith ("Variable non définie : " ^ x))
   | Int n -> VInt n
@@ -64,6 +56,8 @@ let rec eval_expr (env_val : env_val) (env_fun : env_fun) (e : expr) : valeur =
   | Seq (_, _) -> failwith "to do"
   | _ -> failwith "to do"
 
+(*    Affiche une valeur sur la sortie standard *)
+(* valeur -> unit *)
 let print_valeur valeur =
   match valeur with
   | VInt x -> print_int x; print_newline()
@@ -71,6 +65,8 @@ let print_valeur valeur =
   | VFloat x -> print_float x; print_newline()
   | _ -> failwith "Valeur non prise en charge"
 
+(*  Évalue un programme en exécutant la fonction 'main' si elle est définie. *)
+(* programme -> unit *)
 let eval_prog (p : programme) =
   let env_fun = List.map (fun f -> (f.id, f)) p in
   match List.assoc_opt "main" env_fun with
