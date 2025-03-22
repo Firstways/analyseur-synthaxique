@@ -1,6 +1,13 @@
 (* Belouin Eliot & Boyenval Louis-Marie*)
 open Syntax
 
+
+let get_int exp = match exp with 
+                  | VInt i -> i 
+                  | _ -> failwith "NON NON NON "
+
+
+
 (* Fonction prenant en paramètre une expression et fournissant un résultat en sortie *)
 let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * fun_decl) list) =
   match e with
@@ -82,6 +89,9 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
   | Seq (_, _) -> failwith "to do1"
 
 
+  | Print_int exp -> VUnit (print_int (get_int (eval_expr exp env env_fun)))
+
+
   | _ -> failwith "to do2"
 
 
@@ -95,7 +105,7 @@ let print_valeur valeur =
   | VInt x -> print_int x; print_newline()
   | VBool x -> print_string (string_of_bool x); print_newline()
   | VFloat x -> print_float x; print_newline()
-  | _ -> failwith "Valeur non prise en charge"
+  | VUnit x -> print_string (Unit.to_string x); print_newline()
 
 let eval_prog (p : programme) =
   let env_fun = List.map (fun f -> (f.id, f)) p in
