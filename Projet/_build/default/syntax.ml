@@ -1,4 +1,4 @@
-(* Belouin Eliot & Boyenval Louis-Marie*)
+(* Belouin Eliot & Boyenval Louis-Marie 684i*)
 
 (* typ représente les types de SimpleML *)
 type typ = TInt | TBool | TUnit | TFloat
