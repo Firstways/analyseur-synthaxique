@@ -85,9 +85,11 @@ match expr with
 | Var x -> recherche_variable_in_type_env x type_env
 | Int _ ->  Some TInt
 | Bool _ -> Some TBool
+| Float _ -> Some TFloat
 | BinaryOp (op, y, z) -> 
   (match verif_bin_op op, verif_expr y (type_env) fun_env, verif_expr z type_env fun_env with
   | Some TInt, Some TInt, Some TInt -> Some TInt  (* Opérations arithmétiques *)
+  | Some TFloat, Some TFloat, Some TFloat -> Some TFloat  (* Opérations sur les flottants *)
   | Some TBool, Some TInt, Some TInt -> Some TBool  (* Comparaisons : >, <, =, <> ... ✅ Ajouté *)
   | Some TBool, Some TBool, Some TBool -> Some TBool  (* Comparaisons booléennes *)
   | _ -> None)
@@ -113,15 +115,18 @@ match expr with
   (match verif_if_fun_in_fun_env f fun_env with
    | None -> failwith ("Function "^f^" not found in environment")
    | Some list -> 
-       let args_types = List.map (fun ex -> verif_expr ex type_env fun_env) args in
-       if List.for_all Option.is_some args_types then
-         let args_types_unwrapped = List.map Option.get args_types in
-         if verif_args args_types_unwrapped list then 
+      let args_types = List.map (fun ex -> verif_expr ex type_env fun_env) args in
+      if List.for_all Option.is_some args_types then
+        let args_types_unwrapped = List.map Option.get args_types in
+        if verif_args args_types_unwrapped list then 
            get_fun f fun_env 
-         else None
-       else failwith "erreur dansAPP")
-
-| _ -> failwith "nope"
+        else None
+      else failwith "erreur dans APP")
+  
+  | Print_int exp -> (match (verif_expr exp type_env fun_env) with
+                      | Some TInt -> Some TInt
+                      | _ -> failwith "pas un type int")
+  | _ -> failwith "nope"
 
 (* vérifie que la déclaration des fonctions est correcte *)
 

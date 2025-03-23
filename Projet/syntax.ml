@@ -45,6 +45,7 @@ type expr =
   | Let of idvar * typ * expr * expr
   | App of idfun * expr list
   | Seq of expr * expr
+  | Print_int of expr
 
 
 
@@ -105,6 +106,7 @@ and string_of_expr expr =
   | IdFun x -> x
   | Int n -> string_of_int n
   | Bool b -> string_of_bool b
+  | Float f -> string_of_float f  (* Gestion des flottants *)
   | BinaryOp (binop, expr1, expr2) ->
       string_of_expr expr1 ^ string_of_binary_op binop ^ string_of_expr expr2
   | UnaryOp (unop, expr) -> string_of_unary_op unop ^ string_of_expr expr
@@ -115,8 +117,9 @@ and string_of_expr expr =
       "let (" ^ idvar ^ ":" ^ string_of_type typ ^ ") = " ^ string_of_expr expr1
       ^ " in " ^ string_of_expr expr2
   | App (idfun, expr_list) -> idfun ^ "(" ^ string_of_expr_list expr_list ^ ")"
-
-  | _ -> failwith ""
+  | Seq (e1, e2) -> string_of_expr e1 ^ "; " ^ string_of_expr e2
+  | Print_int (e) -> string_of_expr e
+ 
 
 let rec string_of_var_list var_list =
   match var_list with
@@ -153,4 +156,4 @@ type env_decl = (idfun * fun_decl) list
 
 
 (* type env_val = (idvar * valeur) list *)
-type valeur = VInt of int | VBool of bool | VUnit | VFloat of float
+type valeur = VInt of int | VBool of bool | VUnit of unit | VFloat of float

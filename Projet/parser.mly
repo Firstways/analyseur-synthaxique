@@ -24,6 +24,7 @@
 %token TUNIT
 
 %token SEMICOLON
+%token PRINT_INT
 
 %left ELSE IN
 %nonassoc NOT
@@ -86,6 +87,7 @@ expr:
   | expr LESS expr    { BinaryOp (Less, $1, $3) }
   | expr LESSEQ expr  { BinaryOp (LessEq, $1, $3) }
   | expr SEMICOLON expr { Seq ($1, $3) }
+  | PRINT_INT expr { Print_int ($2)}
 
 app_expr:
   | VAR LPAR list_expr RPAR { App ($1, $3) }
