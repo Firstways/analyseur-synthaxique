@@ -152,7 +152,7 @@ type env_type = (idvar * typ) list
 
 type env_fun = (idfun * (typ list * typ)) list
 
-type env_decl = (idfun * fun_decl) list
+(* type env_decl = (idfun * fun_decl) list *)
 
 
 (* type env_val = (idvar * valeur) list *)

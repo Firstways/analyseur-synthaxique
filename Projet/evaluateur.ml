@@ -37,7 +37,6 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
       | And, VBool b1, VBool b2 -> VBool (b1 && b2)
       | Or, VBool b1, VBool b2 -> VBool (b1 || b2)
 
-      (* Les 8 opérations de test d'égalité *)
       | Equal, VInt i1, VInt i2 -> VBool (i1 = i2)
       | Equal, VBool b1, VBool b2 -> VBool (b1 = b2)
       | NEqual, VInt i1, VInt i2 -> VBool (i1 <> i2)
@@ -46,6 +45,14 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
       | LessEq, VInt i1, VInt i2 -> VBool (i1 <= i2)
       | Great, VInt i1, VInt i2 -> VBool (i1 > i2)
       | GreatEq, VInt i1, VInt i2 -> VBool (i1 >= i2)
+
+      | Equal, VFloat i1, VFloat i2 -> VBool (i1 = i2)
+      | NEqual, VFloat i1, VFloat i2 -> VBool (i1 <> i2)
+      | Less, VFloat i1, VFloat i2 -> VBool (i1 < i2)
+      | LessEq, VFloat i1, VFloat i2 -> VBool (i1 <= i2)
+      | Great, VFloat i1, VFloat i2 -> VBool (i1 > i2)
+      | GreatEq, VFloat i1, VFloat i2 -> VBool (i1 >= i2)
+      
 
       (* Les 4 opérations sur les flottants *)
       | PlusF, VFloat f1, VFloat f2 -> VFloat (f1 +. f2) 
@@ -85,6 +92,7 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
       | Some func_decl ->
           let arg_values = List.map (fun e -> eval_expr e env env_fun) args in
           let param_names = List.map fst func_decl.var_list in
+          (* @ env permet d’ajouter cet environnement local au précédent pour préserver les variables globales. *)
           let new_env = List.combine param_names arg_values @ env in
           eval_expr func_decl.corps new_env env_fun
       | None -> failwith ("Fonction non définie : " ^ fname))

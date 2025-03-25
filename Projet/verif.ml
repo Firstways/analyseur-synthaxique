@@ -92,8 +92,9 @@ match expr with
   (match verif_bin_op op, verif_expr y (type_env) fun_env, verif_expr z type_env fun_env with
   | Some TInt, Some TInt, Some TInt -> Some TInt  (* Opérations arithmétiques *)
   | Some TFloat, Some TFloat, Some TFloat -> Some TFloat  (* Opérations sur les flottants *)
-  | Some TBool, Some TInt, Some TInt -> Some TBool  (* Comparaisons : >, <, =, <> ... ✅ Ajouté *)
+  | Some TBool, Some TInt, Some TInt -> Some TBool  (* Comparaisons : >, <, =, <> ...  Ajouté *)
   | Some TBool, Some TBool, Some TBool -> Some TBool  (* Comparaisons booléennes *)
+  | Some TBool, Some TFloat, Some TFloat -> Some TBool
   | _ -> None)
 
 | UnaryOp (op, z) ->

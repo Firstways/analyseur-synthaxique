@@ -2,6 +2,7 @@
 open Syntax
 
 (* Récupère la valeur entière d'une expression de type VInt, sinon lève une erreur. *)
+(* valeur->int *)
 let get_int (exp : valeur) : int = match exp with 
   | VInt i -> i 
   | _ -> failwith "exp n'est pas de type int"
@@ -11,8 +12,8 @@ let get_int (exp : valeur) : int = match exp with
    e : expr -> L'expression à évaluer.
    env : (idvar * valeur) list -> L'environnement des variables associant un identifiant à une valeur.
    env_fun : (idfun * fun_decl) list -> L'environnement des fonctions associant un identifiant à une déclaration de fonction.
-   Retourne : valeur -> La valeur résultante de l'évaluation.
 *)
+(* expr -> (idvar * valeur) list -> (idvar * fun_decl) list -> valeur  *)
 let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * fun_decl) list) : valeur =
   match e with
   | Var x -> (try List.assoc x env with Not_found -> failwith ("Variable non définie : " ^ x))
@@ -36,7 +37,6 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
       | And, VBool b1, VBool b2 -> VBool (b1 && b2)
       | Or, VBool b1, VBool b2 -> VBool (b1 || b2)
 
-      (* Les 8 opérations de test d'égalité *)
       | Equal, VInt i1, VInt i2 -> VBool (i1 = i2)
       | Equal, VBool b1, VBool b2 -> VBool (b1 = b2)
       | NEqual, VInt i1, VInt i2 -> VBool (i1 <> i2)
@@ -45,6 +45,14 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
       | LessEq, VInt i1, VInt i2 -> VBool (i1 <= i2)
       | Great, VInt i1, VInt i2 -> VBool (i1 > i2)
       | GreatEq, VInt i1, VInt i2 -> VBool (i1 >= i2)
+
+      | Equal, VFloat i1, VFloat i2 -> VBool (i1 = i2)
+      | NEqual, VFloat i1, VFloat i2 -> VBool (i1 <> i2)
+      | Less, VFloat i1, VFloat i2 -> VBool (i1 < i2)
+      | LessEq, VFloat i1, VFloat i2 -> VBool (i1 <= i2)
+      | Great, VFloat i1, VFloat i2 -> VBool (i1 > i2)
+      | GreatEq, VFloat i1, VFloat i2 -> VBool (i1 >= i2)
+      
 
       (* Les 4 opérations sur les flottants *)
       | PlusF, VFloat f1, VFloat f2 -> VFloat (f1 +. f2) 
@@ -99,8 +107,8 @@ let rec eval_expr (e : expr) (env : (idvar * valeur) list) (env_fun : (idfun * f
 
 (* 
    Affiche une valeur sur la sortie standard.
-   valeur : valeur -> La valeur à afficher.
 *)
+(* valeur -> unit *)
 let print_valeur (valeur : valeur) : unit =
   match valeur with
   | VInt x -> print_int x; print_newline()
@@ -110,8 +118,7 @@ let print_valeur (valeur : valeur) : unit =
 
 (* 
    Évalue un programme en exécutant sa fonction "main".
-   p : programme -> Le programme à évaluer.
-   Retourne : unit.
+   programme -> unit
 *)
 let eval_prog (p : programme) : unit =
   let env_fun = List.map (fun f -> (f.id, f)) p in (* déclaration de env_fun *)
